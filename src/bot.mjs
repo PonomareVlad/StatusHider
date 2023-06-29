@@ -18,8 +18,8 @@ bot.callbackQuery("create", async ctx => {
     const name = `hidden_${Date.now()}_${id}_by_${bot}`;
     const set = new URL(name, "https://t.me/addemoji/");
     const [{file_id: sticker}] = await Promise.all([
-        ctx.replyWithChatAction("choose_sticker"),
         ctx.api.uploadStickerFile(id, "animated", new InputFile(url)),
+        ctx.replyWithChatAction("choose_sticker"),
     ]);
     const stickers = [{sticker, emoji_list: ["✨"]}];
     const reply_markup = new InlineKeyboard().text(buttons.delete, "delete");

@@ -25,9 +25,9 @@ bot.callbackQuery("create", async ctx => {
     ]);
     const stickers = [{sticker, emoji_list: ["✨"]}];
     const reply_markup = new InlineKeyboard().text(ctx.l("buttons").delete, "delete");
+    await ctx.replyFmt(ctx.l("ready", set), {reply_markup});
     return Promise.all([
         ctx.api.createNewStickerSet(id, name, ctx.l("title", bot), stickers, "animated", {sticker_type: "custom_emoji"}),
-        ctx.replyFmt(ctx.l("ready", set), {reply_markup}),
         ctx.deleteMessage(),
     ]);
 });
@@ -50,8 +50,6 @@ bot.on("message", async ctx => {
     const reply = isPremium ?
         ctx.replyFmt(ctx.l("instruction"), {reply_markup}) :
         ctx.replyFmt(ctx.l("premium"));
-    return Promise.all([
-        ctx.deleteMessage(),
-        reply,
-    ]);
+    await reply;
+    await ctx.deleteMessage();
 });

@@ -47,6 +47,6 @@ Set invisible emoji from ${link("this", set)} set to your status
 After that, return to this message and click button to delete set
 `
 
-    title = bot => `Don't forget to delete this set using @${bot}`
+    title = bot => `Delete this set using @${bot}`
 
 }

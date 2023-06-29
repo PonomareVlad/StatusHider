@@ -20,7 +20,7 @@ bot.callbackQuery("create", async ctx => {
     const set = new URL(name, "https://t.me/addemoji/");
     const [{file_id: sticker}] = await Promise.all([
         ctx.api.uploadStickerFile(id, "animated", new InputFile(url)),
-        ctx.answerCallbackQuery({text: ctx.l("creating")}),
+        ctx.answerCallbackQuery({text: ctx.l("answers").creating}),
         ctx.replyWithChatAction("choose_sticker"),
     ]);
     const stickers = [{sticker, emoji_list: ["✨"]}];
@@ -36,7 +36,7 @@ bot.callbackQuery("delete", async ctx => {
     const [{url} = {}] = ctx.entities("text_link");
     const name = new URL(url).pathname.replace("/addemoji/", "");
     return Promise.all([
-        ctx.answerCallbackQuery({text: ctx.l("deleting")}),
+        ctx.answerCallbackQuery({text: ctx.l("answers").deleting}),
         ctx.api.deleteStickerSet(name),
         ctx.replyFmt(ctx.l("success")),
         ctx.deleteMessage(),

@@ -1,6 +1,6 @@
-import {url, buttons, instruction, premium, success, title, ready} from "./data.mjs";
 import {Bot, InlineKeyboard, InputFile} from "grammy";
 import {hydrateReply} from "@grammyjs/parse-mode";
+import {url, l10n} from "./data.mjs";
 
 export const {
     TELEGRAM_BOT_TOKEN: token,
@@ -10,6 +10,7 @@ export const {
 export const bot = new Bot(token);
 
 bot.use(hydrateReply);
+bot.use(l10n);
 
 bot.callbackQuery("create", async ctx => {
     const {id} = ctx.msg.chat;
@@ -19,14 +20,14 @@ bot.callbackQuery("create", async ctx => {
     const set = new URL(name, "https://t.me/addemoji/");
     const [{file_id: sticker}] = await Promise.all([
         ctx.api.uploadStickerFile(id, "animated", new InputFile(url)),
-        ctx.answerCallbackQuery({text: "Создание набора..."}),
+        ctx.answerCallbackQuery({text: ctx.l("creating")}),
         ctx.replyWithChatAction("choose_sticker"),
     ]);
     const stickers = [{sticker, emoji_list: ["✨"]}];
-    const reply_markup = new InlineKeyboard().text(buttons.delete, "delete");
+    const reply_markup = new InlineKeyboard().text(ctx.l("buttons").delete, "delete");
     return Promise.all([
-        ctx.api.createNewStickerSet(id, name, title(bot), stickers, "animated", {sticker_type: "custom_emoji"}),
-        ctx.replyFmt(ready(set), {reply_markup}),
+        ctx.api.createNewStickerSet(id, name, ctx.l("title", bot), stickers, "animated", {sticker_type: "custom_emoji"}),
+        ctx.replyFmt(ctx.l("ready", set), {reply_markup}),
         ctx.deleteMessage(),
     ]);
 });
@@ -35,9 +36,9 @@ bot.callbackQuery("delete", async ctx => {
     const [{url} = {}] = ctx.entities("text_link");
     const name = new URL(url).pathname.replace("/addemoji/", "");
     return Promise.all([
-        ctx.answerCallbackQuery({text: "Удаление набора..."}),
+        ctx.answerCallbackQuery({text: ctx.l("deleting")}),
         ctx.api.deleteStickerSet(name),
-        ctx.replyFmt(success),
+        ctx.replyFmt(ctx.l("success")),
         ctx.deleteMessage(),
     ]);
 });
@@ -46,10 +47,10 @@ bot.on("message", async ctx => {
     const isPremium =
         ctx.from.is_premium &&
         ctx.from.id === ctx.chat.id;
-    const reply_markup = new InlineKeyboard().text(buttons.create, "create");
+    const reply_markup = new InlineKeyboard().text(ctx.l("buttons").create, "create");
     const reply = isPremium ?
-        ctx.replyFmt(instruction, {reply_markup}) :
-        ctx.replyFmt(premium);
+        ctx.replyFmt(ctx.l("instruction"), {reply_markup}) :
+        ctx.replyFmt(ctx.l("premium"));
     return Promise.all([
         ctx.deleteMessage(),
         reply,

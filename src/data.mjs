@@ -1,37 +1,37 @@
-import {bold, fmt, link} from "@grammyjs/parse-mode";
 import {getURL} from "vercel-grammy";
+import empty from "./l10n/empty.mjs";
+import en from "./l10n/en.mjs";
+import ru from "./l10n/ru.mjs";
+
+export const locales = {en, ru};
+
+export const fallbackLocale = "en";
 
 export const url = new URL(getURL({path: "sticker.tgs"}));
 
-export const buttons = {
-    create: "Создать набор",
-    delete: "Удалить набор"
+export const getLocaleKey = locale => locale === fallbackLocale ? undefined : locale;
+
+export const getFromLocale = (locale, key, ...args) => {
+    const target = locale[key] || key;
+    return typeof target === "function" ?
+        target(...args) :
+        target;
 }
 
-export const premium = fmt`
-Этот бот доступен только для пользователей с премиум подпиской
-`;
+export function getByLocales(key) {
+    const entries = Object.entries(locales).map(
+        ([name, locale]) => [name, getFromLocale(new locale(), key)]
+    );
+    return Object.fromEntries(entries.filter(Boolean));
+}
 
-export const instruction = fmt`
-${bold("Для скрытия статуса вам нужно выполнить следующие шаги:")}
-
-1. Нажмите кнопку для создания набора с невидимым emoji
-2. Установите невидимый emoji из этого набора в свой статус
-3. Вернитесь в этот бот и нажмите кнопку для удаления набора
-
-В результате, ваш статус будет полностью скрыт и не будет отображаться при нажатиях
-`;
-
-export const success = fmt`
-Набор успешно удален!
-
-Если вы хотите повторить процесс, отправьте команду /start
-`;
-
-export const ready = set => fmt`
-Установите невидимый emoji из ${link("этого", set)} набора в ваш статус
-
-После этого, вернитесь к этому сообщению и нажмите кнопку для удаления набора
-`;
-
-export const title = bot => `Удалите этот набор с помощью @${bot}`;
+export function l10n(ctx, next) {
+    const locale = new (
+        locales[ctx.from?.language_code] ||
+        locales[fallbackLocale] ||
+        empty
+    );
+    ctx.l = (key, ...args) =>
+        getFromLocale(locale, key, ...args);
+    return next();
+}

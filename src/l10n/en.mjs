@@ -11,6 +11,7 @@ export default class En extends Locale {
     answers = {
         creating: "Creating a set...",
         deleting: "Deleting a set...",
+        deleted: "Set deleted successfully!",
     }
 
     bot = {

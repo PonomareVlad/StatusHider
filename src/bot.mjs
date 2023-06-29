@@ -36,9 +36,8 @@ bot.callbackQuery("delete", async ctx => {
     const [{url} = {}] = ctx.entities("text_link");
     const name = new URL(url).pathname.replace("/addemoji/", "");
     return Promise.all([
-        ctx.answerCallbackQuery({text: ctx.l("answers").deleting}),
+        ctx.answerCallbackQuery({text: ctx.l("answers").deleted, show_alert: true}),
         ctx.api.deleteStickerSet(name),
-        ctx.replyFmt(ctx.l("success")),
         ctx.deleteMessage(),
     ]);
 });

@@ -11,6 +11,7 @@ export default class Ru extends Locale {
     answers = {
         creating: "Создание набора...",
         deleting: "Удаление набора...",
+        deleted: "Набор успешно удален!",
     }
 
     bot = {

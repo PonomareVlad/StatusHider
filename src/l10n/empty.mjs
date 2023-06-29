@@ -8,6 +8,7 @@ export default class Locale {
     answers = {
         creating: "creating",
         deleting: "deleting",
+        deleted: "deleted",
     }
 
     bot = {

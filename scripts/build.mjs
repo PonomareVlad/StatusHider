@@ -40,4 +40,4 @@ await Promise.all(Object.entries(getByLocales("bot")).flatMap(
             ]
         }
     )
-);
+).catch(console.error);

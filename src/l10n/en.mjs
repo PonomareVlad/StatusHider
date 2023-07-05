@@ -16,8 +16,8 @@ export default class En extends Locale {
 
     bot = {
         name: "Status Hider",
-        short: "This bot will help hide your premium status. \r\nDeveloped by @Ponomarev_Studio",
-        description: "This bot will help hide your premium status. \r\nDeveloped by @Ponomarev_Studio",
+        short: "This bot will help hide your premium status. \r\n\r\nDeveloped by @Ponomarev_Studio",
+        description: "This bot will help hide your premium status. \r\n\r\nDeveloped by @Ponomarev_Studio",
     }
 
     instruction = () => fmt`

@@ -16,8 +16,8 @@ export default class Ru extends Locale {
 
     bot = {
         name: "Скрыватель Статуса",
-        short: "Этот бот поможет скрыть ваш премиум статус",
-        description: "Этот бот поможет скрыть ваш премиум статус",
+        short: "Этот бот поможет скрыть ваш премиум статус. \r\nРазработано @Ponomarev_Studio",
+        description: "Этот бот поможет скрыть ваш премиум статус. \r\nРазработано @Ponomarev_Studio",
     }
 
     instruction = () => fmt`
